@@ -3,6 +3,7 @@
  */
 package edu.ups.pap;
 import edu.ups.pap.models.Lectura;
+import edu.ups.pap.models.Reporte;
 
 public class App {
     public String getGreeting() {
@@ -12,6 +13,36 @@ public class App {
     public static void main(String[] args) {
         //System.out.println(new App().getGreeting());
         runLectura();//PC1.1a
+        runTransformaciones();
+    }
+    private  static void runTransformaciones(){
+        Lectura<Double> temperatura = new Lectura<Double>("S01", 22.5,"°C" );
+        Lectura<Integer> ocupacion = new Lectura<Integer>("S01", 18, "personas");
+
+        Lectura<Double> farenheit = temperatura.transformar(c -> c* 9.0 / 5.0 + 32 ,"°F" );
+
+        Lectura<String> ocupacionTexto = ocupacion.transformar(y -> y +  "personas", "texto");
+
+         String texto = ocupacionTexto.getValor();
+
+         System.out.println("--------------------------------");
+
+         System.out.println("Original" + " " + temperatura.getIdSensor() + "|" + temperatura.getUnidad() + temperatura.getValor());
+         System.out.println("Tranformada" + " " + farenheit.getIdSensor()  + "|" + farenheit.getUnidad() + farenheit.getValor());
+
+         System.out.println("Original Ocupacion " + " " +  ocupacion.getIdSensor()  + "|" + ocupacion.getUnidad() + ocupacion.getValor());
+         System.out.println("Ocupacion Tranformada " +  " " + ocupacionTexto.getIdSensor() + "|" +  texto + " " +  "Unidad ; " + ocupacionTexto.getUnidad());
+
+         //Double  -> Reporte
+         System.out.println("---------------------------");
+
+         Lectura<Double> temperatura2 = new Lectura<>("S01", 22.5, "°C");
+         Lectura<Reporte> reporte = temperatura2.transformar(valor -> new Reporte(temperatura2.getIdSensor(), valor ,temperatura2.getUnidad()), "Reporte" );
+         System.out.println("Transformada a reporte: " + reporte.getValor());
+
+
+        
+
     }
 
     private static void runLectura(){//PC1.1a
